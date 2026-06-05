@@ -15,6 +15,9 @@ class LinearRegression:
         self.b_0 = 0
         self.b_1 = 0
         self.coefficients = (self.b_0, self.b_1)
+        self.loss_history = []
+        self.sum_squared_errors = 0
+        self.r_squared = self.score(y)
 
     def fit(self, x, y):
         for _epoch in range(self.epochs):
@@ -29,6 +32,13 @@ class LinearRegression:
 
             self.b_0 -= (self.learning_rate * (total_0 / len(x)))
             self.b_1 -= (self.learning_rate * (total_1 / len(x)))
+            self.loss_history.append(error_sq / len(x))
+            self.sum_squared_errors = error_sq
+
+    def score(self, y):
+        ss_total = sum((yi - np.mean(y)) ** 2 for yi in y)
+        self.r_squared = 1 - (self.sum_squared_errors / ss_total)
+        return self.r_squared
 
     def predict(self, x):
         return func(x, b=self.b_0, m=self.b_1)
