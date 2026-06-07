@@ -11,7 +11,6 @@ class LinearRegression:
         self.b_1 = 0.0
         self.loss_history = []
         self.sum_squared_errors = 0.0
-        self.r_squared = None
 
     def fit(self, x, y):
         x = np.array(x)
@@ -44,14 +43,6 @@ class LinearRegression:
         self.b_1 = numerator / denominator
         self.b_0 = mean_y - self.b_1 * mean_x
         self.coeff = (self.b_0, self.b_1)
-
-    def rsquare(self, y):
-        ss_total = sum((yi - np.mean(y)) ** 2 for yi in y)
-        if ss_total == 0:
-            self.r_squared = 0.0
-        else:
-            self.r_squared = 1 - (self.sum_squared_errors / ss_total)
-        return self.r_squared
 
     def score(self, x, y):
         predictions = [self.predict(xi) for xi in x]

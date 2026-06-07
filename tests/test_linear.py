@@ -24,7 +24,8 @@ def test_fit_changes_coefficients():
     )
 
 def test_score_calculates_r_squared(model):
-    r_squared = model.score(y)
+    r_squared = model.score(x, y)
+    assert isinstance(r_squared, float)
     assert 0 <= r_squared <= 1
 
 def test_predict_returns_expected_values(model):
@@ -43,7 +44,7 @@ def test_r_square_to_sklearn(model):
     sklearn_model = SklearnLinearRegression()
     sklearn_model.fit(np.array(x).reshape(-1, 1), y)
     sklearn_r2 = sklearn_model.score(np.array(x).reshape(-1, 1), y)
-    model_r2 = model.score(y)
+    model_r2 = model.score(x, y)
     assert math.isclose(model_r2, sklearn_r2, abs_tol=0.01)
 
 def test_predict_on_test_data(model):
