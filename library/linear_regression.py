@@ -33,6 +33,18 @@ class LinearRegression:
             self.loss_history.append(np.mean(errors ** 2))
         self.coeff = (self.b_0, self.b_1)
 
+    def fit_ols(self, x, y):
+        x_arr = np.asarray(x)
+        y_arr = np.asarray(y)
+
+        mean_x, mean_y = np.mean(x_arr), np.mean(y_arr)
+        numerator = np.sum((x_arr - mean_x) * (y_arr - mean_y))
+        denominator = np.sum((x_arr - mean_x) ** 2)
+
+        self.b_1 = numerator / denominator
+        self.b_0 = mean_y - self.b_1 * mean_x
+        self.coeff = (self.b_0, self.b_1)
+
     def rsquare(self, y):
         ss_total = sum((yi - np.mean(y)) ** 2 for yi in y)
         if ss_total == 0:
@@ -41,8 +53,15 @@ class LinearRegression:
             self.r_squared = 1 - (self.sum_squared_errors / ss_total)
         return self.r_squared
 
-    def score(self, y):
-        return self.rsquare(y)
+    def score(self, x, y):
+        predictions = [self.predict(xi) for xi in x]
+
+        ss_res = sum((yi - y_hat) ** 2 for yi, y_hat in zip(y, predictions))
+
+        y_mean = sum(y) / len(y)
+        ss_tot = sum((yi - y_mean) ** 2 for yi in y)
+
+        return 1 - (ss_res / ss_tot)
 
     def predict(self, x):
         if isinstance(x, (list, tuple, np.ndarray)):
