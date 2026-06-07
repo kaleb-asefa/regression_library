@@ -28,8 +28,9 @@ class LinearRegression:
             self.b_1 -= self.learning_rate * (total_1 / len(x))
             self.loss_history.append(error_sq / len(x))
             self.sum_squared_errors = error_sq
+            self.coeff = (self.b_0, self.b_1)
 
-    def score(self, y):
+    def rsquare(self, y):
         ss_total = sum((yi - np.mean(y)) ** 2 for yi in y)
         if ss_total == 0:
             self.r_squared = 0.0
