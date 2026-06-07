@@ -14,21 +14,24 @@ class LinearRegression:
         self.r_squared = None
 
     def fit(self, x, y):
-        for _epoch in range(self.epochs):
-            total_0 = 0.0
-            total_1 = 0.0
-            error_sq = 0.0
-            for i in range(len(x)):
-                error = func(x[i], b=self.b_0, m=self.b_1) - y[i]
-                error_sq += error**2
-                total_0 += error * 1
-                total_1 += error * x[i]
+        x = np.array(x)
+        y = np.array(y)
+        n = len(x)
+        for _ in range(self.epochs):
+            # Vectorized prediction
+            y_pred = self.b_1 * x + self.b_0
+            errors = y_pred - y
 
-            self.b_0 -= self.learning_rate * (total_0 / len(x))
-            self.b_1 -= self.learning_rate * (total_1 / len(x))
-            self.loss_history.append(error_sq / len(x))
-            self.sum_squared_errors = error_sq
-            self.coeff = (self.b_0, self.b_1)
+            # Vectorized gradients
+            grad_b0 = (2 / n) * np.sum(errors)
+            grad_b1 = (2 / n) * np.sum(errors * x)
+
+            # Update weights
+            self.b_0 -= self.learning_rate * grad_b0
+            self.b_1 -= self.learning_rate * grad_b1
+
+            self.loss_history.append(np.mean(errors ** 2))
+        self.coeff = (self.b_0, self.b_1)
 
     def rsquare(self, y):
         ss_total = sum((yi - np.mean(y)) ** 2 for yi in y)
@@ -38,5 +41,10 @@ class LinearRegression:
             self.r_squared = 1 - (self.sum_squared_errors / ss_total)
         return self.r_squared
 
+    def score(self, y):
+        return self.rsquare(y)
+
     def predict(self, x):
-        return func(x, b=self.b_0, m=self.b_1)
+        if isinstance(x, (list, tuple, np.ndarray)):
+            return [float(func(xi, b=self.b_0, m=self.b_1)) for xi in x]
+        return float(func(x, b=self.b_0, m=self.b_1))

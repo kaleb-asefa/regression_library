@@ -11,13 +11,12 @@ from library import LinearRegression, x, y
 @pytest.fixture
 def model():
     model = LinearRegression(learning_rate=0.01, epochs=1000)
-    sklearn_model = SklearnLinearRegression()
-    sklearn_model.fit(np.array(x).reshape(-1, 1), y)
     model.fit(x, y)
-    yield model, sklearn_model
-    del model, sklearn_model
+    yield model
+    del model
 
-def test_fit_changes_coefficients(model):
+def test_fit_changes_coefficients():
+    model = LinearRegression(learning_rate=0.01, epochs=10)
     initial_b0, initial_b1 = model.b_0, model.b_1
     model.fit(x, y)
     assert not (
@@ -41,7 +40,8 @@ def test_coefficients_close_to_expected(model):
     assert model.coeff == (model.b_0, model.b_1)
 
 def test_r_square_to_sklearn(model):
-    _, sklearn_model = model
+    sklearn_model = SklearnLinearRegression()
+    sklearn_model.fit(np.array(x).reshape(-1, 1), y)
     sklearn_r2 = sklearn_model.score(np.array(x).reshape(-1, 1), y)
     model_r2 = model.score(y)
     assert math.isclose(model_r2, sklearn_r2, abs_tol=0.01)
