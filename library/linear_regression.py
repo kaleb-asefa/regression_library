@@ -9,7 +9,6 @@ class LinearRegression:
         self.epochs = epochs
         self.b_0 = 0.0
         self.b_1 = 0.0
-        self.coefficients = (self.b_0, self.b_1)
         self.loss_history = []
         self.sum_squared_errors = 0.0
         self.r_squared = None

@@ -1,4 +1,4 @@
-from regression_library import x, y, LinearRegression
+from library import LinearRegression, x, y
 
 
 def main() -> None:

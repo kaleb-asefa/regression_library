@@ -1,6 +1,6 @@
 import math
 
-from regression_library import LinearRegression, x, y
+from library import LinearRegression, x, y
 
 
 def test_fit_changes_coefficients():
