@@ -5,7 +5,16 @@ import pytest
 from sklearn.linear_model import LinearRegression as SklearnLinearRegression
 from sklearn.metrics import r2_score
 
-from library import LinearRegression, x, x_test, y, y_test
+from library import (
+    LinearRegression,
+    MultipleLinearRegression,
+    x,
+    x_multi_test,
+    x_test,
+    y,
+    y_multi_test,
+    y_test,
+)
 
 
 @pytest.fixture
@@ -84,4 +93,23 @@ def test_ols_predict_on_test_data(model):
     assert all(isinstance(pred, (int, float)) for pred in predictions)
     r2 = r2_score(y_test, predictions)
     assert r2 > 0.9
+
+
+def test_multiple_regression_vs_sklearn():
+    model = MultipleLinearRegression()
+    model.fit(x_multi_test, y_multi_test)
+
+    sklearn_model = SklearnLinearRegression()
+    sklearn_model.fit(x_multi_test, y_multi_test)
+
+    assert math.isclose(model.intercept, sklearn_model.intercept_, abs_tol=1e-5)
+    assert np.allclose(model.weights, sklearn_model.coef_, atol=1e-5)
+
+    preds = model.predict(x_multi_test)
+    sklearn_preds = sklearn_model.predict(x_multi_test)
+    assert np.allclose(preds, sklearn_preds, atol=1e-5)
+
+    score = model.score(x_multi_test, y_multi_test)
+    sklearn_score = sklearn_model.score(x_multi_test, y_multi_test)
+    assert math.isclose(score, sklearn_score, abs_tol=1e-5)
 

@@ -58,3 +58,35 @@ class LinearRegression:
         if isinstance(x, (list, tuple, np.ndarray)):
             return [float(func(xi, b=self.b_0, m=self.b_1)) for xi in x]
         return float(func(x, b=self.b_0, m=self.b_1))
+
+
+class MultipleLinearRegression:
+    def __init__(self):
+        self.weights = None
+        self.intercept = None
+
+    def fit(self, X, y):
+        X_arr = np.asarray(X)
+        y_arr = np.asarray(y)
+        # Add bias term (column of 1s) to feature matrix
+        X_b = np.c_[np.ones(X_arr.shape[0]), X_arr]
+        # Normal Equation
+        theta = np.linalg.inv(X_b.T @ X_b) @ X_b.T @ y_arr
+        self.intercept = theta[0]
+        self.weights = theta[1:]
+
+    def predict(self, X):
+        X_arr = np.asarray(X)
+        if self.weights is None or self.intercept is None:
+            raise ValueError("Model must be fitted before calling predict.")
+        return X_arr @ self.weights + self.intercept
+
+    def score(self, X, y):
+        X_arr = np.asarray(X)
+        y_arr = np.asarray(y)
+        preds = self.predict(X_arr)
+        ss_res = np.sum((y_arr - preds) ** 2)
+        ss_tot = np.sum((y_arr - np.mean(y_arr)) ** 2)
+        if ss_tot == 0:
+            return 0.0
+        return float(1.0 - (ss_res / ss_tot))
