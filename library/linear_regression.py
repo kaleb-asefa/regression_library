@@ -11,6 +11,7 @@ class LinearRegression:
         self.b_1 = 0.0
         self.loss_history = []
         self.sum_squared_errors = 0.0
+        self.coeff_history = []
 
     def fit(self, x, y):
         x = np.array(x)
@@ -30,6 +31,7 @@ class LinearRegression:
             self.b_1 -= self.learning_rate * grad_b1
 
             self.loss_history.append(np.mean(errors ** 2))
+            self.coeff_history.append((self.b_0, self.b_1))
         self.coeff = (self.b_0, self.b_1)
 
     def fit_ols(self, x, y):
@@ -43,6 +45,7 @@ class LinearRegression:
         self.b_1 = numerator / denominator
         self.b_0 = mean_y - self.b_1 * mean_x
         self.coeff = (self.b_0, self.b_1)
+        self.coeff_history = [(self.b_0, self.b_1)]
 
     def score(self, x, y):
         predictions = [self.predict(xi) for xi in x]

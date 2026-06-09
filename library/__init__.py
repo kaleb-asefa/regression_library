@@ -11,9 +11,9 @@ __all__ = [
     "LinearRegression",
     "MultipleLinearRegression",
     "x",
-    "y",
-    "x_test",
-    "y_test",
     "x_multi_test",
+    "x_test",
+    "y",
     "y_multi_test",
+    "y_test",
 ]

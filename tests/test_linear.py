@@ -113,3 +113,28 @@ def test_multiple_regression_vs_sklearn():
     sklearn_score = sklearn_model.score(x_multi_test, y_multi_test)
     assert math.isclose(score, sklearn_score, abs_tol=1e-5)
 
+
+def test_plot_regression_line():
+    from unittest.mock import patch
+    from animate import plot_regression_line
+
+    model = LinearRegression(learning_rate=0.01, epochs=10)
+    model.fit(x, y)
+
+    with patch("matplotlib.pyplot.show") as mock_show:
+        plot_regression_line(x, y, model)
+        mock_show.assert_called_once()
+
+
+def test_animate_regression_fitting():
+    from unittest.mock import patch
+    from animate import animate_regression_fitting
+
+    model = LinearRegression(learning_rate=0.01, epochs=10)
+    model.fit(x, y)
+
+    with patch("matplotlib.pyplot.show") as mock_show:
+        anim = animate_regression_fitting(x, y, model)
+        assert anim is not None
+        mock_show.assert_called_once()
+
