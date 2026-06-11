@@ -1,7 +1,15 @@
+"""
+Visualization and animation utilities for monitoring regression fitting.
+
+This module provides functions to plot fitted regression lines and create real-time
+animations of the gradient descent optimization process, tracking how loss decreases.
+"""
+
 import os
+from typing import Union, List, Optional
 import matplotlib
 
-# Headless detection: use Agg backend if no DISPLAY is present
+# Headless environment detection: use Agg backend if no DISPLAY is present
 if "DISPLAY" not in os.environ and not os.environ.get("MPLBACKEND"):
     matplotlib.use("Agg")
 
@@ -11,9 +19,25 @@ import numpy as np
 from library import LinearRegression, x, y
 
 
-def plot_regression_line(x, y, model):
-    x_arr = np.asarray(x)
-    y_arr = np.asarray(y)
+def plot_regression_line(
+    x: Union[List[float], np.ndarray],
+    y: Union[List[float], np.ndarray],
+    model: LinearRegression
+) -> None:
+    """
+    Plot a static 2D scatter plot of the data along with the fitted regression line.
+
+    Parameters
+    ----------
+    x : array-like of shape (n_samples,)
+        Input feature values.
+    y : array-like of shape (n_samples,)
+        True target values.
+    model : LinearRegression
+        A fitted simple linear regression model containing `b_0` and `b_1`.
+    """
+    x_arr = np.asarray(x, dtype=float)
+    y_arr = np.asarray(y, dtype=float)
     plt.figure()
     plt.scatter(x_arr, y_arr, color="blue", label="Data Points")
 
@@ -29,14 +53,41 @@ def plot_regression_line(x, y, model):
     plt.show()
 
 
-def animate_regression_fitting(x, y, model, save_path=None):
+def animate_regression_fitting(
+    x: Union[List[float], np.ndarray],
+    y: Union[List[float], np.ndarray],
+    model: LinearRegression,
+    save_path: Optional[str] = None
+) -> FuncAnimation:
+    """
+    Create an interactive animation showing the regression line and loss history over epochs.
+
+    Requires that the provided `model` has been fitted and contains `coeff_history`
+    and `loss_history`.
+
+    Parameters
+    ----------
+    x : array-like of shape (n_samples,)
+        Input feature values.
+    y : array-like of shape (n_samples,)
+        True target values.
+    model : LinearRegression
+        A fitted simple linear regression model with training history.
+    save_path : str or None, default=None
+        Optional file path (e.g., 'fitting.gif') to save the animation using Pillow.
+
+    Returns
+    -------
+    FuncAnimation
+        The matplotlib FuncAnimation object.
+    """
     if not hasattr(model, "coeff_history") or not model.coeff_history:
         raise ValueError(
             "Model has not been fitted or does not have coefficient history."
         )
 
-    x_arr = np.asarray(x)
-    y_arr = np.asarray(y)
+    x_arr = np.asarray(x, dtype=float)
+    y_arr = np.asarray(y, dtype=float)
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 

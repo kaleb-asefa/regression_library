@@ -1,3 +1,10 @@
+"""
+Interactive command-line interface for testing the Linear Regression Library.
+
+Provides a user-friendly console menu to load synthetic or classic real datasets,
+fit linear models, print evaluation metrics, and run interactive fitting animations.
+"""
+
 import sys
 
 from animate.track import animate_regression_fitting
@@ -14,6 +21,7 @@ from library import (
 
 
 def main() -> None:
+    """Run the interactive linear regression demo."""
     print("=" * 50)
     print("Welcome to the From-Scratch Linear Regression Library!")
     print("=" * 50)

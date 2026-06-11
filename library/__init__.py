@@ -1,7 +1,13 @@
 """
-Small regression library package.
+From-Scratch Linear Regression Library.
 
-Expose the main regression classes at package level.
+A educational, lightweight machine learning package implementing simple and multiple
+linear regression algorithms from scratch using NumPy.
+
+Features:
+- `LinearRegression`: Supports gradient descent fitting and analytical closed-form (OLS) fitting.
+- `MultipleLinearRegression`: Normal equation solver for multidimensional features.
+- Synthetic and Classic dataset generators/loaders for testing and comparative benchmarking.
 """
 
 from .data import (
