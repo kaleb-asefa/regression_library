@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "data-blog-regression"
-version = "0.1.0"
+version = "0.1.1"
 description = "From-scratch linear and multiple regression library for the Data Blog portfolio"
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
-authors = [ { name = "Your Name" } ]
+authors = [ { name = "Kaleb Asefa" } ]
 dependencies = [
-  "numpy>=1.21"
+  "numpy>=1.21", "matplotlib>=3.4"
 ]

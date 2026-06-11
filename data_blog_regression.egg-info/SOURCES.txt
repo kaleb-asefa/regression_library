@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+data_blog/__init__.py
+data_blog/data.py
+data_blog/linear_regression.py
+data_blog/utils.py
+data_blog/animate/__init__.py
+data_blog/animate/track.py
+data_blog_regression.egg-info/PKG-INFO
+data_blog_regression.egg-info/SOURCES.txt
+data_blog_regression.egg-info/dependency_links.txt
+data_blog_regression.egg-info/requires.txt
+data_blog_regression.egg-info/top_level.txt
+tests/test_linear.py
