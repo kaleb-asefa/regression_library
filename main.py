@@ -7,8 +7,8 @@ fit linear models, print evaluation metrics, and run interactive fitting animati
 
 import sys
 
-from animate.track import animate_regression_fitting
-from library import (
+from data_blog.animate.track import animate_regression_fitting
+from data_blog import (
     LinearRegression,
     MultipleLinearRegression,
     load_housing_regression,

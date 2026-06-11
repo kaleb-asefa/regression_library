@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "regression-library"
+name = "data-blog-regression"
 version = "0.1.0"
-description = "Tiny linear regression library for demos and portfolio"
+description = "From-scratch linear and multiple regression library for the Data Blog portfolio"
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }

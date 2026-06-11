@@ -5,7 +5,7 @@ import pytest
 from sklearn.linear_model import LinearRegression as SklearnLinearRegression
 from sklearn.metrics import r2_score
 
-from library import (
+from data_blog import (
     LinearRegression,
     MultipleLinearRegression,
     x,
@@ -120,7 +120,7 @@ def test_multiple_regression_vs_sklearn():
 
 def test_plot_regression_line():
     from unittest.mock import patch
-    from animate import plot_regression_line
+    from data_blog.animate import plot_regression_line
 
     model = LinearRegression(learning_rate=0.01, epochs=10)
     model.fit(x, y)
@@ -132,7 +132,7 @@ def test_plot_regression_line():
 
 def test_animate_regression_fitting():
     from unittest.mock import patch
-    from animate import animate_regression_fitting
+    from data_blog.animate import animate_regression_fitting
 
     model = LinearRegression(learning_rate=0.01, epochs=10)
     model.fit(x, y)

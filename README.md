@@ -32,7 +32,7 @@ python main.py
 You can easily import and train models in your own scripts:
 
 ```python
-from library import LinearRegression, x, y
+from data_blog import LinearRegression, x, y
 
 # Instantiate and fit using Gradient Descent
 model = LinearRegression(learning_rate=0.01, epochs=1000)

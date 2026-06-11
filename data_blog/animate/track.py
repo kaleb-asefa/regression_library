@@ -16,7 +16,7 @@ if "DISPLAY" not in os.environ and not os.environ.get("MPLBACKEND"):
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import numpy as np
-from library import LinearRegression, x, y
+from data_blog import LinearRegression, x, y
 
 
 def plot_regression_line(

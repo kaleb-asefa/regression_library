@@ -7,6 +7,7 @@ linear regression algorithms from scratch using NumPy.
 Features:
 - `LinearRegression`: Supports gradient descent fitting and analytical closed-form (OLS) fitting.
 - `MultipleLinearRegression`: Normal equation solver for multidimensional features.
+- `data_blog.animate`: Visualization utilities to animate gradient descent fitting and plot regression lines.
 - Synthetic and Classic dataset generators/loaders for testing and comparative benchmarking.
 """
 
