@@ -101,7 +101,7 @@ def animate_regression_fitting(x, y, model, save_path=None):
 if __name__ == "__main__":
     # Test execution when run as a standalone script
     print("Fitting model...")
-    model = LinearRegression(learning_rate=0.01, epochs=1000)
+    model = LinearRegression(learning_rate=0.01, epochs=5)
     model.fit(x, y)
     print("Generating static plot...")
     plot_regression_line(x, y, model)

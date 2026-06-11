@@ -14,6 +14,10 @@ from library import (
     y,
     y_multi_test,
     y_test,
+    make_simple_regression,
+    make_multiple_regression,
+    load_iris_regression,
+    load_housing_regression,
 )
 
 
@@ -137,4 +141,55 @@ def test_animate_regression_fitting():
         anim = animate_regression_fitting(x, y, model)
         assert anim is not None
         mock_show.assert_called_once()
+
+
+def test_make_simple_regression():
+    X, y = make_simple_regression(n_samples=50, slope=3.0, intercept=-2.0, noise=0.5, random_seed=123)
+    assert len(X) == 50
+    assert len(y) == 50
+    
+    # Fit OLS model on the generated data
+    model = LinearRegression()
+    model.fit_ols(X, y)
+    
+    # Should be close to slope 3.0 and intercept -2.0
+    assert math.isclose(model.b_1, 3.0, abs_tol=0.2)
+    assert math.isclose(model.b_0, -2.0, abs_tol=0.2)
+
+
+def test_make_multiple_regression():
+    X, y = make_multiple_regression(n_samples=100, n_features=4, weights=[1.5, -2.0, 0.5, 3.0], intercept=10.0, noise=0.1, random_seed=42)
+    assert X.shape == (100, 4)
+    assert len(y) == 100
+    
+    model = MultipleLinearRegression()
+    model.fit(X, y)
+    
+    assert math.isclose(model.intercept, 10.0, abs_tol=0.1)
+    assert np.allclose(model.weights, [1.5, -2.0, 0.5, 3.0], atol=0.1)
+
+
+def test_load_iris_regression():
+    X, y = load_iris_regression()
+    assert len(X) == 40
+    assert len(y) == 40
+    
+    model = LinearRegression()
+    model.fit_ols(X, y)
+    
+    score = model.score(X, y)
+    assert score > 0.90  # Iris petal width vs length has a strong correlation
+
+
+def test_load_housing_regression():
+    X, y = load_housing_regression()
+    assert X.shape == (20, 3)
+    assert len(y) == 20
+    
+    model = MultipleLinearRegression()
+    model.fit(X, y)
+    
+    score = model.score(X, y)
+    assert score > 0.95  # Our synthetic housing data fits very well
+
 
