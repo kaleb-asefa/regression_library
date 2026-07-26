@@ -11,7 +11,7 @@ A clean, modular, from-scratch implementation of **Simple Linear Regression** (B
 
 ## 📽️ Gradient Descent Fitting Animation
 
-Watch batch gradient descent optimize the regression model step-by-step. The plot on the left updates the fitted line in real-time while the plot on the right tracks MSE loss reduction across epochs, complete with live parameter statistics (`Epoch`, `Loss`, `b_0`, `b_1`).
+Watch batch gradient descent optimize the regression model step-by-step starting from $(b_0=0, b_1=0)$ at Epoch 0. The plot on the left updates the fitted line in real-time with an extended **1-second hold per early epoch** for the first 5 epochs—making early line rotation and translation crystal clear—while the plot on the right tracks MSE loss reduction across epochs, complete with live parameter statistics (`Epoch`, `Loss`, `b_0`, `b_1`).
 
 ![Gradient Descent Fitting Animation](docs/assets/gradient_descent_fit.gif)
 
@@ -20,12 +20,12 @@ Watch batch gradient descent optimize the regression model step-by-step. The plo
 ## ✨ Features
 
 - **Simple Linear Regression**:
-  - **Batch Gradient Descent**: Iterative parameter optimization with full history tracking (`loss_history`, `coeff_history`).
+  - **Batch Gradient Descent**: Iterative parameter optimization starting from $(0, 0)$ with full history tracking (`loss_history`, `coeff_history`).
   - **Ordinary Least Squares (OLS)**: Closed-form analytical solver ($b_1 = \frac{\sum (x - \bar{x})(y - \bar{y})}{\sum (x - \bar{x})^2}$).
 - **Multiple Linear Regression**:
   - Analytical **Normal Equation** matrix solver ($\theta = (X^T X)^{-1} X^T y$) supporting $n$-dimensional feature inputs.
 - **Dynamic Optimization Animations (`track.py`)**:
-  - Real-time Matplotlib animation with customizable pacing (`fps`, `interval`), sample frame rate, status text overlays, and end-frame linger (`pause_seconds`) so viewers can absorb final model convergence.
+  - Real-time Matplotlib animation with customizable pacing (`fps`, `interval`), initial epoch holding (`early_epochs_hold`, `early_epoch_seconds`), status text overlays, and end-frame linger (`pause_seconds`) so viewers can absorb final model convergence.
   - Export animations to crisp `.gif` files using Pillow.
 - **Dataset Tools & Loaders**:
   - Synthetic dataset generators (`make_simple_regression`, `make_multiple_regression`).

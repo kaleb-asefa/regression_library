@@ -62,8 +62,8 @@ def animate_regression_fitting(
     interval: Optional[int] = None,
     max_frames: int = 100,
     pause_seconds: float = 2.0,
-    early_epochs_hold: int = 10,
-    early_repeat_factor: int = 3,
+    early_epochs_hold: int = 5,
+    early_epoch_seconds: float = 1.0,
     show_plot: bool = True,
 ) -> FuncAnimation:
     """
@@ -90,10 +90,10 @@ def animate_regression_fitting(
         Maximum number of animated frames sampled across fitting history.
     pause_seconds : float, default=2.0
         Duration in seconds to linger on the final fitted frame before repeating.
-    early_epochs_hold : int, default=10
-        Number of initial training epochs to display with extra frame lagging/slowdown.
-    early_repeat_factor : int, default=3
-        Multiplier for frame repetition during initial epochs to emphasize early fitting steps.
+    early_epochs_hold : int, default=5
+        Number of initial training epochs to display with extended 1-second holding.
+    early_epoch_seconds : float, default=1.0
+        Duration in seconds to hold each initial epoch frame.
     show_plot : bool, default=True
         Whether to call `plt.show()` if `save_path` is None.
 
@@ -155,11 +155,12 @@ def animate_regression_fitting(
     history_len = len(model.coeff_history)
     total_epochs = max(1, history_len - 1)
 
-    # 1. Early epoch frame sequence with extra lagging/holding to highlight initial line movements
+    # 1. Early epoch frame sequence held for early_epoch_seconds (e.g., 1.0s) per epoch
     early_count = min(early_epochs_hold + 1, history_len)
+    early_repeat_factor = int(early_epoch_seconds * (1000 / interval)) if early_epoch_seconds > 0 else 1
     early_indices = []
     for idx in range(early_count):
-        early_indices.extend([idx] * early_repeat_factor)
+        early_indices.extend([idx] * max(1, early_repeat_factor))
 
     # 2. Remaining epoch sequence sampled across remaining epochs
     if history_len > early_count:
@@ -241,5 +242,6 @@ if __name__ == "__main__":
     plot_regression_line(x, y, model)
     print("Generating interactive animation...")
     animate_regression_fitting(x, y, model, show_plot=False)
+
 
 
