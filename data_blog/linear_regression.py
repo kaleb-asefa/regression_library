@@ -60,8 +60,13 @@ class LinearRegression:
         y_arr = np.asarray(y, dtype=float)
         n = len(x_arr)
         
-        self.loss_history = []
-        self.coeff_history = []
+        self.b_0 = 0.0
+        self.b_1 = 0.0
+        initial_pred = self.b_1 * x_arr + self.b_0
+        initial_loss = float(np.mean((initial_pred - y_arr) ** 2))
+
+        self.loss_history = [initial_loss]
+        self.coeff_history = [(0.0, 0.0)]
 
         for _ in range(self.epochs):
             # Vectorized prediction

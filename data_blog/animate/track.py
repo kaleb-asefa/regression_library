@@ -62,6 +62,8 @@ def animate_regression_fitting(
     interval: Optional[int] = None,
     max_frames: int = 100,
     pause_seconds: float = 2.0,
+    early_epochs_hold: int = 10,
+    early_repeat_factor: int = 3,
     show_plot: bool = True,
 ) -> FuncAnimation:
     """
@@ -88,6 +90,10 @@ def animate_regression_fitting(
         Maximum number of animated frames sampled across fitting history.
     pause_seconds : float, default=2.0
         Duration in seconds to linger on the final fitted frame before repeating.
+    early_epochs_hold : int, default=10
+        Number of initial training epochs to display with extra frame lagging/slowdown.
+    early_repeat_factor : int, default=3
+        Multiplier for frame repetition during initial epochs to emphasize early fitting steps.
     show_plot : bool, default=True
         Whether to call `plt.show()` if `save_path` is None.
 
@@ -126,7 +132,7 @@ def animate_regression_fitting(
     # Overlay text box for metrics
     metrics_text = ax1.text(
         0.03,
-        0.65,
+        0.63,
         "",
         transform=ax1.transAxes,
         fontsize=9,
@@ -137,7 +143,7 @@ def animate_regression_fitting(
     # Right subplot: Loss Curve
     (loss_line,) = ax2.plot([], [], color="#9467bd", lw=2, label="MSE Loss")
     (loss_dot,) = ax2.plot([], [], "ro", markersize=6, label="Current Epoch")
-    ax2.set_xlim(0, len(model.loss_history))
+    ax2.set_xlim(0, max(1, len(model.loss_history) - 1))
     max_loss = max(model.loss_history) if model.loss_history else 1.0
     ax2.set_ylim(0, max_loss * 1.1)
     ax2.set_xlabel("Epoch")
@@ -146,16 +152,32 @@ def animate_regression_fitting(
     ax2.grid(True, linestyle="--", alpha=0.4)
     ax2.legend(loc="upper right")
 
-    # Sample history indices for comfortable viewing pace
     history_len = len(model.coeff_history)
-    if history_len > max_frames:
-        sampled_indices = np.linspace(0, history_len - 1, max_frames, dtype=int).tolist()
-    else:
-        sampled_indices = list(range(history_len))
+    total_epochs = max(1, history_len - 1)
 
-    # Add pause/lagging on the final fitted frame
+    # 1. Early epoch frame sequence with extra lagging/holding to highlight initial line movements
+    early_count = min(early_epochs_hold + 1, history_len)
+    early_indices = []
+    for idx in range(early_count):
+        early_indices.extend([idx] * early_repeat_factor)
+
+    # 2. Remaining epoch sequence sampled across remaining epochs
+    if history_len > early_count:
+        rem_len = history_len - early_count
+        rem_budget = max(10, max_frames - early_count)
+        if rem_len > rem_budget:
+            sampled_rem = np.linspace(early_count, history_len - 1, rem_budget, dtype=int).tolist()
+        else:
+            sampled_rem = list(range(early_count, history_len))
+    else:
+        sampled_rem = []
+
+    # 3. Add tail pause/lagging on the final fitted frame
     pause_frames = int(pause_seconds * (1000 / interval)) if pause_seconds > 0 else 0
-    frame_indices = sampled_indices + [sampled_indices[-1]] * pause_frames
+    final_idx = history_len - 1
+    tail_indices = [final_idx] * pause_frames
+
+    frame_indices = early_indices + sampled_rem + tail_indices
 
     # X values for smooth line visualization across plot range
     x_line_range = np.linspace(min(x_arr) - x_margin, max(x_arr) + x_margin, 100)
@@ -178,8 +200,9 @@ def animate_regression_fitting(
         loss_line.set_data(range(idx + 1), model.loss_history[: idx + 1])
         loss_dot.set_data([idx], [current_loss])
 
+        epoch_label = "0 (Initial)" if idx == 0 else f"{idx}/{total_epochs}"
         text_str = (
-            f"Epoch: {idx + 1}/{history_len}\n"
+            f"Epoch: {epoch_label}\n"
             f"Loss (MSE): {current_loss:.4f}\n"
             f"b_0 (bias) : {b_0:.4f}\n"
             f"b_1 (slope): {b_1:.4f}"
@@ -218,4 +241,5 @@ if __name__ == "__main__":
     plot_regression_line(x, y, model)
     print("Generating interactive animation...")
     animate_regression_fitting(x, y, model, show_plot=False)
+
 
